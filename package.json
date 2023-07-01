@@ -1,0 +1,19 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "crud-api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marinbonibon/crud-api.git"
+  },
+  "author": "marinbonibon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marinbonibon/crud-api/issues"
+  },
+  "homepage": "https://github.com/marinbonibon/crud-api#readme"
+}
