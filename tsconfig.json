@@ -20,4 +20,11 @@
     "strictPropertyInitialization": false,
     "target": "ES2020"
   },
+  "include": ["src/**/*.ts"],
+  "ts-node": {
+    "esm": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
