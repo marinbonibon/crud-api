@@ -1,14 +1,14 @@
-import crypto from 'crypto';
+import { v4 } from 'uuid';
 
 export const users = [
   {
-    'id': crypto.randomUUID(),
+    'id': v4(),
     'username': 'Bob',
     'age': 30,
     'hobbies': ['swimming']
   },
   {
-    'id': crypto.randomUUID(),
+    'id': v4(),
     'username': 'Clara',
     'age': 20,
     'hobbies': []
