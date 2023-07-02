@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import * as http from 'http';
-import { getUsers, getSingleUser } from './src/controllers/usersController.js';
+import { getUsers, getSingleUser, createUser } from "./src/controllers/usersController.js";
 import { userIdRegExp } from './src/utils/uuidValidation.js';
 
 const mainRoute = '/api/users';
@@ -11,6 +11,8 @@ const server = http.createServer((req, res) => {
   } else if (req.url.match(userIdRegExp) && req.method === 'GET') {
     const id = req.url.split('/').pop();
     getSingleUser(req, res, id).then(r => r);
+  } else if (req.url === mainRoute && req.method === 'POST') {
+    createUser(req, res).then(r => r);
   } else if (req.url.includes(mainRoute) && req.method === 'GET' && !req.url.match(userIdRegExp)) {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Invalid data in request' }));
