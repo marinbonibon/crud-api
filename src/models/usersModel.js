@@ -12,10 +12,18 @@ export const showSingleUser = (id) => {
   });
 }
 
-export const create = (product) => {
+export const create = (user) => {
   return new Promise((res, _rej) => {
-    const newProduct = {id: v4(),...product};
-    users.push(newProduct);
-    res(newProduct);
+    const newUser = {id: v4(),...user};
+    users.push(newUser);
+    res(newUser);
+  });
+}
+
+export const update = (id, user) => {
+  return new Promise((res, _rej) => {
+    const updUserIndex = users.findIndex((u) => u.id === id);
+    users[updUserIndex] = {id, ...user};
+    res(users[updUserIndex]);
   });
 }

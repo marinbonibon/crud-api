@@ -7,12 +7,13 @@ export const __dirname = dirname(__filename);
 
 export default {
   mode: 'development',
-  entry: './index.js',
+  entry: './src/index.js',
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
+    extensions: [".ts", ".js"],
     fallback: {
       "http": false,
       "path": false,
