@@ -1,12 +1,15 @@
-import * as Users from '../models/usersModel.js';
-import { isValidRequestBody } from '../utils/requestBodyValidation.js';
-import { getReqBody } from '../utils/getReqBody.js';
-import { isIdValid } from '../utils/uuidValidation.js';
-import { badRequestError, ERRORMSG, notFoundError } from '../utils/errors.js';
+import * as Users from '../models/usersModel';
+import { isValidRequestBody } from '../utils/requestBodyValidation';
+import { getReqBody } from '../utils/getReqBody';
+import { isIdValid } from '../utils/uuidValidation';
+import { badRequestError, ERRORMSG, notFoundError } from '../utils/errors';
+import { IncomingMessage, ServerResponse } from 'http';
+import { User } from '../types/types';
 
-export const getUsers = async (_req, res) => {
+export const getUsers = async (_req: IncomingMessage, res: ServerResponse) => {
   try {
     const users = await Users.showUsers();
+    console.log('users', users);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(users));
   } catch (err) {
@@ -14,11 +17,15 @@ export const getUsers = async (_req, res) => {
   }
 };
 
-export const getSingleUser = async (_req, res, id) => {
+export const getSingleUser = async (
+  _req: IncomingMessage,
+  res: ServerResponse,
+  id?: string,
+) => {
   try {
     const user = await Users.showUserById(id);
-    const validId = id.match(isIdValid);
-    if(validId) {
+    const validId = id?.match(isIdValid);
+    if (validId) {
       if (!user) {
         notFoundError(res, ERRORMSG.USER_NOT_FOUND);
       }
@@ -32,8 +39,8 @@ export const getSingleUser = async (_req, res, id) => {
   }
 };
 
-export const createUser = async (req, res) => {
-  let body = await getReqBody(req);
+export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
+  const body: string = await getReqBody(req);
   const { username, age, hobbies } = JSON.parse(body);
   try {
     const isValidUser = isValidRequestBody(username, age, hobbies);
@@ -43,7 +50,7 @@ export const createUser = async (req, res) => {
       const user = {
         username,
         age,
-        hobbies
+        hobbies,
       };
       const newUser = await Users.create(user);
       res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -54,24 +61,29 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const updateUser = async (req, res, id) => {
-  let body = await getReqBody(req);
+export const updateUser = async (
+  req: IncomingMessage,
+  res: ServerResponse,
+  id?: string,
+) => {
+  const body = await getReqBody(req);
   const { username, age, hobbies } = JSON.parse(body);
   try {
-    const user = await Users.showUserById(id);
-    const validId = id.match(isIdValid);
-    if(validId) {
+    const user: User | undefined = await Users.showUserById(id);
+    const validId = id?.match(isIdValid);
+    if (validId) {
       if (!user) {
         notFoundError(res, ERRORMSG.USER_NOT_FOUND);
+      } else {
+        const userObj: User = {
+          username: username || user?.username,
+          age: age || user?.age,
+          hobbies: hobbies || user?.hobbies,
+        };
+        const updatedUser = await Users.update(userObj, id);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(updatedUser));
       }
-      const userObj = {
-        username: username || user.username,
-        age: age || user.age,
-        hobbies: hobbies || user.hobbies
-      };
-      const updatedUser = await Users.update(id, userObj);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(updatedUser));
     } else {
       badRequestError(res, ERRORMSG.INVALID_ID);
     }
@@ -80,10 +92,14 @@ export const updateUser = async (req, res, id) => {
   }
 };
 
-export const deleteUser = async (req, res, id) => {
+export const deleteUser = async (
+  _req: IncomingMessage,
+  res: ServerResponse,
+  id?: string,
+) => {
   try {
     const user = await Users.showUserById(id);
-    const validId = id.match(isIdValid);
+    const validId = id?.match(isIdValid);
     if (validId) {
       if (!user) {
         res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -96,7 +112,6 @@ export const deleteUser = async (req, res, id) => {
     } else {
       badRequestError(res, ERRORMSG.INVALID_ID);
     }
-
   } catch (err) {
     console.log('err', err);
   }

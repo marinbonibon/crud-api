@@ -7,13 +7,13 @@ export const __dirname = dirname(__filename);
 
 export default {
   mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index.ts',
   output: {
-    filename: 'main.js',
+    filename: 'main.cjs',
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
-    extensions: [".ts", ".js"],
+    extensions: [".ts", ".js", ".cjs"],
     fallback: {
       "http": false,
       "path": false,
@@ -25,9 +25,14 @@ export default {
     rules: [
       {
         test: /\.ts$/,
+        loader: "ts-loader",
         exclude: /node_modules/,
       },
     ],
+  },
+  externalsPresets: { node: true }, // in order to ignore built-in modules like path, fs, etc.
+  optimization: {
+    minimize: true,
   },
 };
 

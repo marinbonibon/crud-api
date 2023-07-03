@@ -1,5 +1,7 @@
-export const getReqBody = (req) => {
-  return new Promise((res, rej) =>{
+import { IncomingMessage } from 'http';
+
+export const getReqBody = (req: IncomingMessage): Promise<string> => {
+  return new Promise((res, rej) => {
     try {
       let body = '';
       req.on('data', (chunk) => {
@@ -7,9 +9,9 @@ export const getReqBody = (req) => {
       });
       req.on('end', () => {
         res(body);
-      })
+      });
     } catch (err) {
       rej(err);
     }
-  })
-}
+  });
+};
