@@ -2,8 +2,13 @@
   "name": "crud-api",
   "version": "1.0.0",
   "description": "crud-api",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
+    "start:dev": "nodemon src/index.ts",
+    "start:prod": "npm run build && node dist/main.js",
+    "build": "webpack --config webpack.config.js",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +20,22 @@
   "bugs": {
     "url": "https://github.com/marinbonibon/crud-api/issues"
   },
-  "homepage": "https://github.com/marinbonibon/crud-api#readme"
+  "homepage": "https://github.com/marinbonibon/crud-api#readme",
+  "devDependencies": {
+    "@types/uuid": "^9.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^1.19.4",
+    "prettier": "^2.8.8",
+    "ts-loader": "^9.4.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
+    "uuid": "^9.0.0",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  }
 }
