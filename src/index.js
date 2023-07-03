@@ -1,12 +1,13 @@
 import dotenv from 'dotenv';
 import * as http from 'http';
-import { router } from "./router.js";
+import { router } from './router.js';
+import { internalError } from './utils/errors.js';
 
 const server = http.createServer((req, res) => {
   try {
     router(req, res);
   } catch (err) {
-    console.log('err', err);
+    internalError(res);
   }
 });
 

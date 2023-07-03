@@ -1,11 +1,12 @@
-import { users } from '../data/users.js';
-import { v4 } from "uuid";
+import { v4 } from 'uuid';
+
+let users = [];
 
 export const showUsers = () => {
   return new Promise((res, _rej) => res(users));
 }
 
-export const showUserById = (id) => {
+export const  showUserById = (id) => {
   return new Promise((res, _rej) => {
     const user = users.find((u) => u.id === id );
     res(user);
@@ -30,9 +31,9 @@ export const update = (id, user) => {
 }
 
 export const delUser = (id) => {
+  console.log('id', id);
   return new Promise((res, _rej) => {
-    const delUserIndex = users.findIndex((u) => u.id === id);
-    users.splice(delUserIndex);
+    users = users.filter((user) => user.id !== id);
     res();
   });
 }
