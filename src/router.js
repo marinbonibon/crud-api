@@ -1,19 +1,22 @@
-import { createUser, getSingleUser, getUsers, updateUser } from "./controllers/usersController.js";
+import { createUser, deleteUser, getSingleUser, getUsers, updateUser } from "./controllers/usersController.js";
 import { userIdRegExp } from './utils/uuidValidation.js';
 
 const mainRoute = '/api/users';
 
-export const router = (req, res) => {
+export const router = async (req, res) => {
   if (req.url === mainRoute && req.method === 'GET') {
-    getUsers(req, res).then(r => r);
+    await getUsers(req, res);
   } else if (req.url.match(userIdRegExp) && req.method === 'GET') {
     const id = req.url.split('/').pop();
-    getSingleUser(req, res, id).then(r => r);
+    await getSingleUser(req, res, id);
   } else if (req.url === mainRoute && req.method === 'POST') {
-    createUser(req, res).then(r => r);
+    await createUser(req, res);
   } else if (req.url.match(userIdRegExp) && req.method === 'PUT') {
     const id = req.url.split('/').pop();
-    updateUser(req, res, id).then(r => r);
+    await updateUser(req, res, id);
+  } else if (req.url.match(userIdRegExp) && req.method === 'DELETE') {
+    const id = req.url.split('/').pop();
+    await deleteUser(req, res, id);
   } else if (req.url.includes(mainRoute) && req.method === 'GET' && !req.url.match(userIdRegExp)) {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: 'Invalid data in request' }));

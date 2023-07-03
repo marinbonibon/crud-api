@@ -14,7 +14,7 @@ export const getUsers = async (_req, res) => {
 
 export const getSingleUser = async (_req, res, id) => {
   try {
-    const user = await Users.showSingleUser(id);
+    const user = await Users.showUserById(id);
     if (!user) {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'User not found' }));
@@ -54,7 +54,7 @@ export const updateUser = async (req, res, id) => {
   let body = await getReqBody(req);
   const { username, age, hobbies } = JSON.parse(body);
   try {
-    const user = await Users.showSingleUser(id);
+    const user = await Users.showUserById(id);
     if (!user) {
       res.writeHead(404, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'User not found' }));
@@ -67,6 +67,21 @@ export const updateUser = async (req, res, id) => {
       const updatedUser = await Users.update(id, userObj);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(updatedUser));
+    }
+  } catch (err) {
+    console.log('err', err);
+  }
+};
+
+export const deleteUser = async (req, res, id) => {
+  try {
+    const user = await Users.showUserById(id);
+    if (!user) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'User not found' }));
+    } else {
+      await Users.delUser(id);
+      res.writeHead(204, { 'Content-Type': 'application/json' });
     }
   } catch (err) {
     console.log('err', err);
